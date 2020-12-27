@@ -1,28 +1,7 @@
-/*******************************************************************************
 
-    uBlock Origin - a browser extension to block requests.
-    Copyright (C) 2014-2015 The uBlock Origin authors
-    Copyright (C) 2014-present Raymond Hill
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see {http://www.gnu.org/licenses/}.
-
-    Home: https://github.com/gorhill/uBlock
-*/
-
-// For non-background page
 
 'use strict';
+bk_cons.log("vapi-client.js starting")
 
 /******************************************************************************/
 
@@ -57,6 +36,7 @@ vAPI.shutdown = {
         this.jobs.push(job);
     },
     exec: function() {
+        bk_error("vAPI::shutdown::exec")
         // Shutdown asynchronously, to ensure shutdown jobs are called from
         // the top context.
         self.requestIdleCallback(( ) => {
@@ -185,11 +165,13 @@ vAPI.messaging = {
         try {
             this.port = browser.runtime.connect({name: vAPI.sessionId}) || null;
         } catch (ex) {
+            bk_error("vAPI::messaging::createPort failed to connect to port: "+ex);
             this.port = null;
         }
         // Not having a valid port at this point means the main process is
         // not available: no point keeping the content scripts alive.
         if ( this.port === null ) {
+            bk_error("vAPI::messaging::createPort failed to create port, shutting down")
             vAPI.shutdown.exec();
             return null;
         }
@@ -206,6 +188,7 @@ vAPI.messaging = {
     },
 
     getPort: function() {
+        bk_log("vAPI::messaging::getPort")
         return this.port !== null ? this.port : this.createPort();
     },
 
@@ -214,6 +197,7 @@ vAPI.messaging = {
         // the main process is no longer reachable: memory leaks and bad
         // performance become a risk -- especially for long-lived, dynamic
         // pages. Guard against this.
+        bk_log("vAPI::messaging::send");
         if ( this.pending.size > 50 ) {
             vAPI.shutdown.exec();
         }
@@ -231,6 +215,7 @@ vAPI.messaging = {
 
     // Dynamically extend capabilities.
     extend: function() {
+        bk_log("vAPI::messaging::extend");
         if ( this.extended === undefined ) {
             this.extended = vAPI.messaging.send('vapi', {
                 what: 'extendClient'
@@ -255,22 +240,5 @@ vAPI.shutdown.add(( ) => {
 }
 // <<<<<<<< end of HUGE-IF-BLOCK
 
+bk_cons.log("vapi-client.js end")
 
-
-
-
-
-
-
-/*******************************************************************************
-
-    DO NOT:
-    - Remove the following code
-    - Add code beyond the following code
-    Reason:
-    - https://github.com/gorhill/uBlock/pull/3721
-    - uBO never uses the return value from injected content scripts
-
-**/
-
-void 0;

@@ -3,20 +3,20 @@
 
 'use strict';
 
+bk_cons.log("epicker.js starting")
+
 /******************************************************************************/
 /******************************************************************************/
 
 /**
  * Jakob Weichselbaumer:
  *
- * This script page was adapted from uBlock Origin's js/epicker.js file
- *
- * Functionality is preserved, but the original anonymous method call is replaced with a variable assignment to the global namespace
+ * Adapted from uBlock Origin's js/epicker.js file
  */
 window.element_picker_exec = async ( ) => {
 
 /******************************************************************************/
-
+bk_log("window::element_picker_exec");
 const epickerId = vAPI.randomToken();
 let epickerConnectionId;
 
@@ -1244,3 +1244,4 @@ vAPI.MessagingConnection.addListener(onConnectionMessage);
 /******************************************************************************/
 
 };
+bk_cons.log("epicker.js end")

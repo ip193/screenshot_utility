@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 'use strict';
+bk_cons.log("popup.js starting")
 
 let changeColor = document.getElementById('changeColor');
 let snipButton = document.getElementById("snip-button")
@@ -26,3 +27,4 @@ snipButton.onclick = function(element){
   console.log("popup.js: starting element picker");
   window.element_picker_exec();
 }
+bk_cons.log("popup.js end")
