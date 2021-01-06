@@ -19,6 +19,9 @@
     "scripts":["empty.js"],
     "persistent":false
   },
+  "web_accessible_resources": [
+    "css/*.css"
+  ],
   "content_scripts": [
     {
       "matches": [

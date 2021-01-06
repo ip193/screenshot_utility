@@ -234,7 +234,7 @@ window.Feedback = function( options ) {
         
         // send data
         send: function( adapter ) {
-            
+            console.log("feedback.js send called");
             // make sure send adapter is of right prototype
             if ( !(adapter instanceof window.Feedback.Send) ) {
                 throw new Error( "Adapter is not an instance of Feedback.Send" );
