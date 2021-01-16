@@ -4,7 +4,7 @@
   "manifest_version": 2,
 
   "description": "Now with working code!",
-  "permissions": [],
+  "permissions": ["storage"],
     "browser_action": {
       "default_popup": "popup.html",
       "default_title": "Snip Element",

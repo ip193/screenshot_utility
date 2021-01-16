@@ -20,3 +20,7 @@ C
 init-popup.js,d\5\d5cc17421bd7b9db2153adbe8aca8c9574222b46
 ;
 feedback.js,f\9\f95370c7fc80c06e3c65867d62a84b2f59c65cc0
+<
+js/jquery.js,6\f\6fbee01bde5b78b36abfc2740ccf973a3ec56c18
+@
+css/feedback.css,b\d\bdf37f26522fad3f980086eeaffe7d0c505318a9

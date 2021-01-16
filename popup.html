@@ -3,18 +3,24 @@
   <head>
     <style>
       #snip-button{
-        height: 30px;
+        height: 60px;
         width: 90px;
-      }
-      #changeColor {send
-        height: 30px;
-        width: 30px;
-        outline: none;
       }
     </style>
   </head>
   <body>
-  <button id="snip-button">Make and Send screenshot</button>
+  <input type="radio" id="save_locally_option" name="persistence_option" value="local">
+  <label for="save_locally_option">Save Locally</label><br>
+  <input type="radio" id="send_to_server_option" name="persistence_option" value="server">
+  <label for="send_to_server_option">Send</label><br>
+
+  <label for="post-url-input">Send To: </label>
+  <input type="text" id="post-url-input" name="post-url-input">
+
+  <button id="change-url-button">Save URL</button><br><br>
+  <button id="snip-button">Make and Send screenshot</button><br>
+
+  <script src="js/jquery.js"></script>
   <script src="init-popup.js"></script>
   </body>
 </html>
