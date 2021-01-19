@@ -80,15 +80,16 @@ modalBody = document.createElement("div");
 
 window.Feedback = function( options ) {
 
-    console.log("Feedback called with options: "+options);
+    console.log("Feedback called with options: "+window.JSON.stringify(options));
     options = options || {};
 
     // default properties
-    options.label = options.label || "Send Feedback";
-    options.header = options.header || "Send Feedback";
+    options.send_server = options.send_server || false;
     options.url = options.url || "/";
     options.adapter = options.adapter || new window.Feedback.XHR( options.url );
-    
+
+    options.label = options.label || "Send Feedback";
+    options.header = options.header || "Send Feedback";
     options.nextLabel = options.nextLabel || "Continue";
     options.reviewLabel = options.reviewLabel || "Review";
     options.sendLabel = options.sendLabel || "Send";
@@ -96,6 +97,15 @@ window.Feedback = function( options ) {
     
     options.messageSuccess = options.messageSuccess || "Your feedback was sent succesfully.";
     options.messageError = options.messageError || "There was an error sending your feedback to the server.";
+
+    if(!options.send_server){
+        options.label = "Download Feedback";
+        options.header = "Download Feedback";
+
+        options.sendLabel = "Download";
+        options.messageSuccess = "Your feedback was downloaded successfully.";
+        options.messageError = "There was an error downloading your feedback. ";
+    }
     
   
     if (options.pages === undefined ) {
@@ -114,6 +124,20 @@ window.Feedback = function( options ) {
 
         // open send feedback modal window
         open: function() {
+            returnMethods.originalHTML = document.documentElement.outerHTML; // do this here so feedback nodes aren't included
+            let allCSS = [...document.styleSheets]
+                .map(styleSheet => {
+                    try {
+                        return [...styleSheet.cssRules]
+                            .map(rule => rule.cssText)
+                            .join('');
+                    } catch (e) {
+                        console.log('Access to stylesheet %s is denied. Ignoring...', styleSheet.href);
+                    }
+                })
+                .filter(Boolean)
+                .join('\n');
+            returnMethods.originalCSS = allCSS;
             var len = options.pages.length;
             currentPage = 0;
             for (; currentPage < len; currentPage++) {
@@ -247,32 +271,75 @@ window.Feedback = function( options ) {
                 }
             }
 
+            /**
+             * Download a text document
+             * @param filename
+             * @param text
+             */
+            function download(filename, text) {
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                element.setAttribute('download', filename);
+
+                element.style.display = 'none';
+                document.body.appendChild(element);
+
+                element.click();
+
+                document.body.removeChild(element);
+            }
+            console.log("Attaching site HTML to text string...");
+            data.push(returnMethods.originalHTML);
+
+            console.log("Attaching all style rules to text string...");
+            data.push(returnMethods.originalCSS);
+            if(!options.send_server){
+                console.log("feedback::send got send_server==false, downloading locally...")
+
+                console.log("Triggering text file download");
+                download("screenshotJSON.txt", window.JSON.stringify( data ));
+                console.log("Downloading encoded image...");
+                /*var string = doc.output(data[1]);
+                var iframe = "<iframe width='100%' height='100%' src='" + string + "'></iframe>"
+                var x = window.open();
+                x.document.open();
+                x.document.write(iframe);
+                x.document.close();*/
+                var a = document.createElement("a"); //Create <a>
+                a.href = data[1];//"data:image/png;base64," + ImageBase64; //Image Base64 Goes here
+                a.download = "Screenshot.png"; //File name Here
+                a.click(); //Downloaded file
+                //window.location.href = data[1];//'data:application/octet-stream;base64,' + img;
+            }
+
             nextButton.disabled = true;
                 
             emptyElements( modalBody );
-            modalBody.appendChild( loader() );
 
-            // send data to adapter for processing
-            adapter.send( data, function( success ) {
-                
-                emptyElements( modalBody );
-                nextButton.disabled = false;
-                
-                nextButton.firstChild.nodeValue = options.closeLabel;
-                
-                nextButton.onclick = function() {
-                    returnMethods.close();
-                    return false;  
-                };
-                
-                if ( success === true ) {
-                    modalBody.appendChild( document.createTextNode( options.messageSuccess ) );
-                } else {
-                    modalBody.appendChild( document.createTextNode( options.messageError ) );
-                }
-                
-            } );
-  
+            if(options.send_server){
+
+                modalBody.appendChild( loader() );
+                // send data to adapter for processing
+                adapter.send( data, function( success ) {
+
+                    emptyElements( modalBody );
+                    nextButton.disabled = false;
+
+                    nextButton.firstChild.nodeValue = options.closeLabel;
+
+                    nextButton.onclick = function() {
+                        returnMethods.close();
+                        return false;
+                    };
+
+                    if ( success === true ) {
+                        modalBody.appendChild( document.createTextNode( options.messageSuccess ) );
+                    } else {
+                        modalBody.appendChild( document.createTextNode( options.messageError ) );
+                    }
+
+                } );
+            }
         }
     };
 

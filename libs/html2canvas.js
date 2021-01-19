@@ -3243,6 +3243,5 @@ _html2canvas.Renderer.SVG = function( options ) {
 };
 
 window.html2canvas = html2canvas;
-console.log("window.html2canvas: "+html2canvas);
 }(window, document));
 
