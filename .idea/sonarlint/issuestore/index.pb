@@ -24,3 +24,7 @@ C
 js/jquery.js,6\f\6fbee01bde5b78b36abfc2740ccf973a3ec56c18
 @
 css/feedback.css,b\d\bdf37f26522fad3f980086eeaffe7d0c505318a9
+?
+jquery-3.5.1.js,9\8\98592fe5e7b201d43fb987343d56b8a9bb9cad22
+F
+js/feedback-factory.js,0\7\07f8e811e3b37ec45568eb159019d0c1124f74a5

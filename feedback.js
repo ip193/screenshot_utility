@@ -585,6 +585,7 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
 
             if (e.target !== previousElement ) {
                 previousElement = e.target;
+                //  FIXME edit any attributes here previousElement.setAttribute("screenshot-highlighted", action);
 
                 window.clearTimeout( timer );
 
