@@ -68,7 +68,7 @@ if(window.screenshot_popup_initialized){
         console.log("snip-button pressed");
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {type: "start-screenshot"}, function(response) {
-                console.log(response.info);
+                console.log((response!=undefined)?response.info:"Response failed! "+chrome.runtime.lastError.message);
             });
         });
 

@@ -297,19 +297,13 @@ window.Feedback = function( options ) {
                 console.log("feedback::send got send_server==false, downloading locally...")
 
                 console.log("Triggering text file download");
-                download("screenshotJSON.txt", window.JSON.stringify( data ));
+                let jsonRepresentation = {feedback:data[0], image:data[1], html:data[2], css:data[3]}
+                download("screenshotJSON.txt", window.JSON.stringify( jsonRepresentation ));
                 console.log("Downloading encoded image...");
-                /*var string = doc.output(data[1]);
-                var iframe = "<iframe width='100%' height='100%' src='" + string + "'></iframe>"
-                var x = window.open();
-                x.document.open();
-                x.document.write(iframe);
-                x.document.close();*/
                 var a = document.createElement("a"); //Create <a>
                 a.href = data[1];//"data:image/png;base64," + ImageBase64; //Image Base64 Goes here
                 a.download = "Screenshot.png"; //File name Here
                 a.click(); //Downloaded file
-                //window.location.href = data[1];//'data:application/octet-stream;base64,' + img;
             }
 
             nextButton.disabled = true;
@@ -346,8 +340,6 @@ window.Feedback = function( options ) {
     glass.className = "feedback-glass";
     glass.style.pointerEvents = "none";
     glass.setAttribute(H2C_IGNORE, true);
-
-    options = options || {};
 
     button = element( "button", options.label );
     button.className = "feedback-btn feedback-bottom-right";
@@ -536,7 +528,6 @@ window.Feedback.Screenshot.prototype.close = function(){
 
     removeElements( document.getElementsByClassName( this.options.blackoutClass ) );
     removeElements( document.getElementsByClassName( this.options.highlightClass ) );
-
 };
 
 window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modalFooter, nextButton ) {
@@ -585,7 +576,6 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
 
             if (e.target !== previousElement ) {
                 previousElement = e.target;
-                //  FIXME edit any attributes here previousElement.setAttribute("screenshot-highlighted", action);
 
                 window.clearTimeout( timer );
 
@@ -609,12 +599,7 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
                     item.style.width = bounds.width + "px";
                     item.style.height = bounds.height + "px";
                 }, 100);
-
-
-
             }
-
-
         };
 
 
@@ -622,8 +607,6 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
         this.mouseClickEvent = function( e ){
 
             e.preventDefault();
-
-
             if ( action === false) {
                 if ( blackoutBox.getAttribute(dataExclude) === "false") {
                     var blackout = document.createElement("div");
@@ -633,7 +616,7 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
                     blackout.style.width = blackoutBox.style.width;
                     blackout.style.height = blackoutBox.style.height;
 
-                    document.body.appendChild( blackout );
+                    document.body.appendChild(blackout);
                     previousElement = undefined;
                 }
             } else {
@@ -652,9 +635,6 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
                     previousElement = undefined;
                 }
             }
-
-
-
         };
 
         this.highlightClose = element("div", "×");
@@ -670,7 +650,7 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
         ctx = highlightBox.getContext("2d"),
         buttonClickFunction = function( e ) {
             e.preventDefault();
-            
+
             if (blackoutButton.className.indexOf("active") === -1) {
                 blackoutButton.className += " active";
                 highlightButton.className = highlightButton.className.replace(/active/g,"");
