@@ -15,6 +15,7 @@ if ( window.Feedback !== undefined ) {
 var log = function( msg ) {
     window.console.log( msg );
 },
+        removeOnClose = [],
 // function to remove elements, input as arrays
 removeElements = function( remove ) {
     for (var i = 0, len = remove.length; i < len; i++ ) {
@@ -132,7 +133,7 @@ window.Feedback = function( options ) {
                             .map(rule => rule.cssText)
                             .join('');
                     } catch (e) {
-                        console.log('Access to stylesheet %s is denied. Ignoring...', styleSheet.href);
+                        console.error('Access to stylesheet %s is denied. Ignoring...', styleSheet.href);
                     }
                 })
                 .filter(Boolean)
@@ -240,7 +241,7 @@ window.Feedback = function( options ) {
             button.disabled = false;
 
             // remove feedback elements
-            removeElements( [ modal, glass ] );
+            //  FIXME moved to "download" button removeElements( [ modal, glass ].concat(removeOnClose) );
 
             // call end event for current page
             if (currentPage > 0 ) {
@@ -289,7 +290,9 @@ window.Feedback = function( options ) {
                 document.body.removeChild(element);
             }
             console.log("Attaching site HTML to text string...");
-            data.push(returnMethods.originalHTML);
+            removeElements( removeOnClose.concat([ modal, glass ]));
+            data.push(document.documentElement.outerHTML);//returnMethods.originalHTML);
+            //console.error(document.documentElement.outerHTML);
 
             console.log("Attaching all style rules to text string...");
             data.push(returnMethods.originalCSS);
@@ -297,8 +300,13 @@ window.Feedback = function( options ) {
                 console.log("feedback::send got send_server==false, downloading locally...")
 
                 console.log("Triggering text file download");
+                //  cleartext for debugging purposes let jsonRepresentation =
+                //console.error("{Issue:"+data[0].Issue+", image:"+data[1]+", html:"+data[2]+", css:"+data[3]+"}");
+                console.error(data[2]);
+                console.error(data[3]);
                 let jsonRepresentation = {feedback:data[0], image:data[1], html:data[2], css:data[3]}
                 download("screenshotJSON.txt", window.JSON.stringify( jsonRepresentation ));
+
                 console.log("Downloading encoded image...");
                 var a = document.createElement("a"); //Create <a>
                 a.href = data[1];//"data:image/png;base64," + ImageBase64; //Image Base64 Goes here
@@ -606,6 +614,9 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
         // delegate event for body click
         this.mouseClickEvent = function( e ){
 
+            if(previousElement!=undefined) {
+                previousElement.setAttribute("screenshot-was-highlighted", action);
+            }
             e.preventDefault();
             if ( action === false) {
                 if ( blackoutBox.getAttribute(dataExclude) === "false") {
@@ -618,6 +629,8 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
 
                     document.body.appendChild(blackout);
                     previousElement = undefined;
+
+                    removeOnClose.push(blackout);
                 }
             } else {
                 if ( highlightBox.getAttribute(dataExclude) === "false") {
@@ -634,6 +647,7 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
                     clearBox();
                     previousElement = undefined;
                 }
+                removeOnClose.push(highlightBox);
             }
         };
 
