@@ -74,6 +74,13 @@ chrome.runtime.onMessage.addListener(
                 start_feedback();
             }
             sendResponse({info: (was_loaded?"Screenshotting CSS was already loaded":"Loaded Screenshotting CSS")});
+        } else if(request.type == "screenshot-end"){
+            if(request.success){
+                console.log("init-content-script.js successfully concluded screenshot.");
+            } else {
+                console.error("init-content-script.js failed to send request");
+            }
+            sendResponse({info:"screenshot finished."});
         } /*else if (request.type == "get_url"){
             chrome.storage.sync.get("['post_url']", function(response){
                 console.log("Got post_url from storage: "+response.post_url);

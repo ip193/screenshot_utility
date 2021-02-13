@@ -2,6 +2,7 @@
 if(window.screenshot_popup_initialized){
     console.log("init-popup.js has already been initialized");
 } else{
+
     window.screenshot_popup_initialized = true;
     console.log("init-popup.js starting");
 
