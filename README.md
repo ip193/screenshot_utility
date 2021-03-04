@@ -23,7 +23,7 @@ Note: The extension currently does not support images as part of the page screen
 ## Installation
 
 1. Download this repository as a ZIP file (or clone the repository) and unpack it
-![Alt text](readme/download_zip.png?raw=true "Download as ZIP")
+![Alt text](readme/download_zip.png?raw=true "Download as ZIP" | width=350)
 
 2. In Chrome, navigate to: **chrome://extensions/** to enter Extension Settings
 
