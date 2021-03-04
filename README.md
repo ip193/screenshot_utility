@@ -32,3 +32,5 @@ Note: The extension currently does not support images as part of the page screen
 ![Alt text](readme/extensions_menu_devmode.png?raw=true "Developer Mode")
 
 4. Select "Load unpacked" and load the unpacked directory from step 1
+
+5. After restarting the browser, the extension should be ready to use
