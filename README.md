@@ -18,6 +18,8 @@ The tool also allows you to:
 
 If you choose to highlight or blackout information, the HTML attribute *screenshot-was-highlighted = \<highlight\>* will be set, with \<highlight\> taking on a true/false value for highlights and blackouts, respectively.
 
+This tool was built using Niklas Von Hertzen's [feedback.js](https://experiments.hertzen.com/jsfeedback/) script.
+
 Note: The extension currently does not support images as part of the page screenshot. 
 
 ## Installation
