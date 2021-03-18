@@ -33,7 +33,7 @@ The  browser plugin consists of three important parts:
 
 Currently, images are not supported, due to a limitation imposed by the browser's Same-Origin Policy - the webpage, into which feedback.js is injected, is not allowed to make requests to re-download the images in order to incorporate them into the screenshot. 
 
-In order to enable screenshots containing images, the page script should send all necessary DOM and style information to the background script, which uses this information to call html2canvas and create the screenshot. Currently, feedback.js, which is running in the page script and is therefore limited by the Same Origin Policy, internally calls html2canvas with the DOM information from the webpage. 
+In order to enable screenshots containing images, the page script should send all necessary DOM and style information to the background script, which uses this information to call html2canvas and create the screenshot. Currently, feedback.js, which is running in the page script, internally calls html2canvas with the DOM information from the webpage. 
 
 ## Installation
 
