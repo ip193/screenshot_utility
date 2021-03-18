@@ -1,9 +1,6 @@
 # Chrome Browser Extension - Screenshots and DOM Extraction
 
-
-
 This utility allows you to take screenshots of your browser's contents and download them or send them to a server.
-
 The tool also allows you to: 
 
 1. Attach a comment to the screenshot
@@ -14,13 +11,23 @@ The tool also allows you to:
 
 4. Highlight or blackout important information
 
-4. Optionally send all of the above to a server
+5. Optionally send all of the above to a server
 
 If you choose to highlight or blackout information, the HTML attribute *screenshot-was-highlighted = \<highlight\>* will be set, with \<highlight\> taking on a true/false value for highlights and blackouts, respectively.
 
 This tool was built using Niklas Von Hertzen's [feedback.js](https://experiments.hertzen.com/jsfeedback/) script.
 
 Note: The extension currently does not support images as part of the page screenshot. 
+
+## Architecture
+
+![Alt text](readme/browser_screenshot_sequence_diagram.png?raw=true "Sequence diagram for the application")
+
+The  browser plugin consists of three important parts:
+
+1. The popup panel (marked in red, popup.html in the above diagram) is the interface component between the user and the browser extension. From here, the user can configure the behavior of the extension and trigger the screenshotting process
+2. The page script (yellow, comprising both the page script entity as well as the two libraries html2canvas and feedback.js in the diagram) is the totality of javascript methods that the extension injects into the running webpage. This includes the methods needed to run feedback.js and actually construct the screenshot.
+3. The background script (blue) is the script portion of the extension that runs outside of the webpage. This is necessary because the extension is supposed to be able to send network requests containing the collected data, but the Same Origin Policy prevents network requests being made from within the content script. Therefore, the content script first has to send the packaged data to the background script, which is then able to send the request without the same-origin restriction.
 
 ## Installation
 
