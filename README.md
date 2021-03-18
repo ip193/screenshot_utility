@@ -25,9 +25,15 @@ Note: The extension currently does not support images as part of the page screen
 
 The  browser plugin consists of three important parts:
 
-1. The popup panel (marked in red, popup.html in the above diagram) is the interface component between the user and the browser extension. From here, the user can configure the behavior of the extension and trigger the screenshotting process
-2. The page script (yellow, comprising both the page script entity as well as the two libraries html2canvas and feedback.js in the diagram) is the totality of javascript methods that the extension injects into the running webpage. This includes the methods needed to run feedback.js and actually construct the screenshot.
-3. The background script (blue) is the script portion of the extension that runs outside of the webpage. This is necessary because the extension is supposed to be able to send network requests containing the collected data, but the Same Origin Policy prevents network requests being made from within the content script. Therefore, the content script first has to send the packaged data to the background script, which is then able to send the request without the same-origin restriction.
+1. The **popup panel** (marked in red, *popup.html* in the above diagram) is the interface component between the user and the browser extension. From here, the user can configure the behavior of the extension and trigger the screenshotting process
+2. The **page script** (yellow, comprising both the *page script* entity as well as the two libraries *html2canvas* and *feedback.js* in the diagram) is the totality of javascript methods that the extension injects into the running webpage. This includes the methods needed to run feedback.js and actually construct the screenshot.
+3. The **background script** (blue) is the script portion of the extension that runs outside of the webpage. This is necessary because the extension is supposed to be able to send network requests containing the collected data, but the [Same-Origin Policy](https://en.wikipedia.org/wiki/Same-origin_policy) prevents network requests being made from within the content script. Therefore, the content script first has to send the packaged data to the background script, which is then able to send the request without the same-origin restriction.
+
+## Future Work
+
+Currently, images are not supported, due to a limitation imposed by the browser's Same-Origin Policy - the webpage, into which feedback.js is injected, is not allowed to make requests to re-download the images in order to incorporate them into the screenshot. 
+
+In order to enable screenshots containing images, the page script should send all necessary DOM and style information to the background script, which uses this information to call html2canvas and create the screenshot. Currently, feedback.js, which is running in the page script and is therefore limited by the Same Origin Policy, internally calls html2canvas with the DOM information from the webpage. 
 
 ## Installation
 
